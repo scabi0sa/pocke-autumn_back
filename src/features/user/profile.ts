@@ -10,7 +10,7 @@ export type UpdateProfileInput = {//入力データの型定義
 }
 
 //機能：プロフィール取得
-export async function getUserProfile(db: D1Database, userId: string) {
+export async function getUserProfile(db: D1Database, userId: string, viewId?: string) {
   const orm = drizzle(db)
 
   const user = await orm.select()
@@ -21,6 +21,8 @@ export async function getUserProfile(db: D1Database, userId: string) {
   if(!user) {
     return null
   }
+
+  const isMe = userId === viewId
 
   const snsLinks = await orm.select()
     .from(snsUrl)
@@ -36,7 +38,9 @@ export async function getUserProfile(db: D1Database, userId: string) {
     snsUrl: snsLinks.map(link => ({
       id:link.id,
       url: link.url
-    }))
+    })),
+    isMe: isMe,
+    ...(isMe && { email: user.email })
   }
 }
 

@@ -13,6 +13,6 @@ export const bindRoutes = (app: Hono) => {
     app.route('/search', searchRouter)
     app.route('/list', listRouter)
     app.route('/item', itemRouter)
-    app.route('/me', meApp)
+    app.route('/', meApp)
     app.route('/community', comApp)
 }
